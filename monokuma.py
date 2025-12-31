@@ -3,14 +3,18 @@ from discord.ext import commands
 import os
 from dotenv import load_dotenv
 
+# Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
 
+# Configuração dos intents (permissões do bot)
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
+# Cria o bot com prefixo de comando "!"
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+# Evento quando o bot fica online
 @bot.event
 async def on_ready():
     print(f'🐻 Monokuma está online!')
@@ -18,18 +22,21 @@ async def on_ready():
     print(f'ID: {bot.user.id}')
     print('------')
 
+# Evento quando alguém entra no servidor
 @bot.event
 async def on_member_join(member):
     channel = member.guild.system_channel
     if channel:
         await channel.send(f'🎭 Bem-vindo(a) ao jogo, {member.mention}! Upupupu!')
 
+# Comando simples de ping
 @bot.command(name='ping')
 async def ping(ctx):
     """Verifica a latência do bot"""
     latency = round(bot.latency * 1000)
     await ctx.send(f'🏓 Pong! Latência: {latency}ms')
 
+# Comando de informações do servidor
 @bot.command(name='serverinfo')
 async def server_info(ctx):
     """Mostra informações do servidor"""
@@ -44,6 +51,7 @@ async def server_info(ctx):
     embed.set_thumbnail(url=guild.icon.url if guild.icon else None)
     await ctx.send(embed=embed)
 
+# Comando de avatar
 @bot.command(name='avatar')
 async def avatar(ctx, member: discord.Member = None):
     """Mostra o avatar de um usuário"""
@@ -55,6 +63,7 @@ async def avatar(ctx, member: discord.Member = None):
     embed.set_image(url=member.display_avatar.url)
     await ctx.send(embed=embed)
 
+# Comando de limpar mensagens (apenas para moderadores)
 @bot.command(name='clear')
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount: int = 5):
@@ -66,6 +75,7 @@ async def clear(ctx, amount: int = 5):
     deleted = await ctx.channel.purge(limit=amount + 1)
     await ctx.send(f'🧹 {len(deleted) - 1} mensagens foram deletadas!', delete_after=3)
 
+# Tratamento de erros para comando clear
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
@@ -73,6 +83,7 @@ async def clear_error(ctx, error):
     elif isinstance(error, commands.BadArgument):
         await ctx.send("❌ Por favor, forneça um número válido!")
 
+# Comando de dado
 @bot.command(name='dado')
 async def roll_dice(ctx, sides: int = 6):
     """Rola um dado com o número de lados especificado"""
@@ -83,6 +94,16 @@ async def roll_dice(ctx, sides: int = 6):
     
     result = random.randint(1, sides)
     await ctx.send(f'🎲 Você rolou um dado de {sides} lados e tirou: **{result}**')
+
+# Comando de ajuda personalizado
+@bot.command(name='morte')
+async def morte(ctx):
+    """Anuncia que um corpo foi descoberto (Easter egg Danganronpa)"""
+    await ctx.send(
+        "🔔 **UM CORPO FOI DESCOBERTO!** 🔔\n"
+        "🐻 Upupupu! Parece que temos um assassinato!\n"
+        "https://youtu.be/wLMbRc3VCXU"
+    )
 
 @bot.command(name='ajuda')
 async def help_command(ctx):
@@ -100,6 +121,7 @@ async def help_command(ctx):
         `!serverinfo` - Informações do servidor
         `!avatar [@usuário]` - Mostra o avatar
         `!dado [lados]` - Rola um dado
+        `!morte` - 🔔 Anuncia descoberta de corpo
         """,
         inline=False
     )
@@ -113,6 +135,7 @@ async def help_command(ctx):
     embed.set_footer(text="Use ! antes de cada comando")
     await ctx.send(embed=embed)
 
+# Inicia o bot usando o token do arquivo .env
 if __name__ == "__main__":
     token = os.getenv("DISCORD_TOKEN")
     
