@@ -1,0 +1,16 @@
+discord.py>=2.3.2
+python-dotenv>=1.0.0
+```
+
+### **2️⃣ Verificar se todos os arquivos estão corretos**
+
+Sua estrutura deve ficar assim:
+```
+Bot-Mary3/
+├── monokuma.py
+├── requirements.txt      ← ESTE AQUI!
+├── Procfile
+├── railway.json
+├── runtime.txt
+├── .gitignore
+└── .env.example
