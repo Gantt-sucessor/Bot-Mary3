@@ -102,7 +102,7 @@ async def morte(ctx):
     await ctx.send(
         "🔔 **UM CORPO FOI DESCOBERTO!** 🔔\n"
         "🐻 Upupupu! Parece que temos um assassinato!\n"
-        "https://youtu.be/wLMbRc3VCXU"
+        "https://www.youtube.com/watch?v=awTC4GIjGEo"
     )
 
 @bot.command(name='ajuda')
